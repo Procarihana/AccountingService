@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ConverterConfig {
     @Bean
-    @ConfigurationPropertiesBinding
     public UserInfoPresToComConverter userInfoPresToComConverter() {
         return new UserInfoPresToComConverter();
     }
