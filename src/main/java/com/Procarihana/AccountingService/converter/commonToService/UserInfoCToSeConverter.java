@@ -16,8 +16,8 @@ public class UserInfoCToSeConverter extends Converter<UserInfo, com.Procarihana.
 
     @Override
     protected UserInfo doBackward(com.Procarihana.AccountingService.Moudle.service.UserInfo userInfo) {
-        return UserInfo.builder().id(userInfo.getId())
-                .password(userInfo.getPassword())
+        return UserInfo.builder()
+                .id(userInfo.getId())
                 .username(userInfo.getUsername())
                 .build();
     }

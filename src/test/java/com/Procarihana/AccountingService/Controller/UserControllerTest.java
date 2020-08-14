@@ -1,0 +1,83 @@
+package com.Procarihana.AccountingService.Controller;
+
+import com.Procarihana.AccountingService.Manager.UserInfoManager;
+import com.Procarihana.AccountingService.Moudle.common.UserInfo;
+import com.Procarihana.AccountingService.converter.commonToService.UserInfoCToSeConverter;
+import com.Procarihana.AccountingService.exception.GlobalExceptionHandler;
+import com.Procarihana.AccountingService.exception.InvalidParameterException;
+import lombok.val;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
+import java.time.LocalDate;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+public class UserControllerTest {
+    private MockMvc mockMvc;
+    @Mock
+    private UserInfoManager userInfoManager;
+
+    @BeforeEach
+    void setup() {
+        mockMvc = MockMvcBuilders.standaloneSetup(
+                new UserController(
+                        userInfoManager, new UserInfoCToSeConverter()))
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .build();
+    }
+    @AfterEach
+    void  teatDown(){
+        reset(userInfoManager);
+    }
+
+    @Test
+    void getUserInfoByUserIdTest() throws Exception {
+        String username = "666";
+        String password = "666";
+        LocalDate createTime = LocalDate.now();
+        LocalDate updateTime = LocalDate.now();
+        Long userId = 2L;
+        UserInfo userInfoC = UserInfo.builder()
+                .id(userId)
+                .username(username)
+                .password(password)
+                .build();
+        doReturn(userInfoC).when(userInfoManager).getUserInfoByUserID(anyLong());
+
+
+        mockMvc.perform(get("/v1.0/users/" + userId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=utf-8 "))
+                .andExpect(content().string("{\"id\":2,\"username\":\"666\",\"password\":null}"));
+        verify(userInfoManager).getUserInfoByUserID(anyLong());
+    }
+
+    @Test
+    void getUserInfoByInvalidUserId() throws Exception {
+        Long userId = -2L;
+        doThrow(new InvalidParameterException(String.format("The user id %s is invalid.", userId)))
+                .when(userInfoManager)
+                .getUserInfoByUserID(anyLong());
+
+        mockMvc.perform(get("/v1.0/users/" + userId))
+                .andExpect(status().is4xxClientError())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(content()
+                        .string("{\"code\":\"USER_NOT_FOUND\",\"errorType\":\"Cline\",\"massage\":\"The user id -2 is invalid.\",\"statusCode\":400}"));
+    }
+}
