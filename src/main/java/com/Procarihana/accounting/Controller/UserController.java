@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
+
 @RequestMapping("v1.0/users/")
 @Slf4j
 @RestController
@@ -39,9 +41,9 @@ public class UserController {
 
     @GetMapping(value = "/{id}", produces = "application/json; charset=utf-8")
     public ResponseEntity<com.procarihana.accounting.moudle.service.UserInfo> getUserInfoByUserId(
-        @PathVariable("id") Long userId) {
+        @PathVariable("id") @NotNull Long userId) {
         log.info("Get user info by user id {}", userId);
-        if (userId == null | userId <= 0) {
+        if (userId <= 0) {
             throw new InvalidParameterException(String.format("The user id %s is invalid.", userId));
         }
         UserInfo userInfo = userInfoManager.getUserInfoByUserID(userId);

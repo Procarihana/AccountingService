@@ -17,6 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -36,13 +37,14 @@ public class UserControllerTest {
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(
-                new UserController(
-                        userInfoManager, new UserInfoCToSeConverter()))
-                .setControllerAdvice(new GlobalExceptionHandler())
-                .build();
+            new UserController(
+                userInfoManager, new UserInfoCToSeConverter()))
+            .setControllerAdvice(new GlobalExceptionHandler())
+            .build();
     }
+
     @AfterEach
-    void  teatDown(){
+    void teatDown() {
         reset(userInfoManager);
     }
 
@@ -54,17 +56,17 @@ public class UserControllerTest {
         LocalDate updateTime = LocalDate.now();
         Long userId = 2L;
         UserInfo userInfoC = UserInfo.builder()
-                .id(userId)
-                .username(username)
-                .password(password)
-                .build();
+            .id(userId)
+            .username(username)
+            .password(password)
+            .build();
         doReturn(userInfoC).when(userInfoManager).getUserInfoByUserID(anyLong());
 
 
         mockMvc.perform(get("/v1.0/users/" + userId))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=utf-8 "))
-                .andExpect(content().string("{\"id\":2,\"username\":\"666\",\"password\":null}"));
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/json;charset=utf-8 "))
+            .andExpect(content().string("{\"id\":2,\"username\":\"666\",\"password\":null}"));
         verify(userInfoManager).getUserInfoByUserID(anyLong());
     }
 
@@ -72,13 +74,15 @@ public class UserControllerTest {
     void getUserInfoByInvalidUserId() throws Exception {
         Long userId = -2L;
         doThrow(new InvalidParameterException(String.format("The user id %s is invalid.", userId)))
-                .when(userInfoManager)
-                .getUserInfoByUserID(anyLong());
+            .when(userInfoManager)
+            .getUserInfoByUserID(anyLong());
 
         mockMvc.perform(get("/v1.0/users/" + userId))
-                .andExpect(status().is4xxClientError())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(content()
-                        .string("{\"code\":\"USER_NOT_FOUND\",\"errorType\":\"Cline\",\"massage\":\"The user id -2 is invalid.\",\"statusCode\":400}"));
+            .andExpect(status().is4xxClientError())
+            .andExpect(content().contentType("application/json"))
+            .andExpect(content()
+                .string(
+                    "{\"code\":\"USER_NOT_FOUND\",\"errorType\":\"Cline\",\"massage\":\"The user id -2 is invalid.\",\"statusCode\":400}"));
+        verify(userInfoManager,never()).getUserInfoByUserID(anyLong());
     }
 }

@@ -3,10 +3,15 @@ package com.procarihana.accounting.converter.commonToService;
 import com.procarihana.accounting.moudle.service.UserInfo;
 
 import com.google.common.base.Converter;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 
-
+@Component
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class UserInfoCToSeConverter extends Converter<com.procarihana.accounting.moudle.common.UserInfo, UserInfo> {
     @Override
     protected @NotNull UserInfo doForward(@NotNull com.procarihana.accounting.moudle.common.UserInfo userInfo) {
