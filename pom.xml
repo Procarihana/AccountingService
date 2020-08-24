@@ -21,7 +21,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-
+    <!-- aliyun-->
     <repositories>
         <repository>
             <id>nexus-aliyun</id>
@@ -30,6 +30,25 @@
         </repository>
     </repositories>
     <dependencies>
+        <!-- shiro-spring -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+
+
+        <!--Swagger-UI API doc generator-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.7.0</version>
+        </dependency>
 
         <!-- mybatis-spring-boot-starter -->
         <dependency>
@@ -132,7 +151,7 @@
                                         <limit>
                                             <counter>COMPLEXITY</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>0.60</minimum>
+                                            <minimum>0.40</minimum>
                                         </limit>
                                     </limits>
                                 </rule>

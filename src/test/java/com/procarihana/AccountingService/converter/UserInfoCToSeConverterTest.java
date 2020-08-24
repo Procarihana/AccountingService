@@ -35,7 +35,7 @@ public class UserInfoCToSeConverterTest {
         String password = "555";
         Long userId = 3L;
 
-        val userInfoS = com.procarihana.accounting.moudle.service.UserInfo.builder()
+        com.procarihana.accounting.moudle.service.UserInfo userInfoS = com.procarihana.accounting.moudle.service.UserInfo.builder()
                 .id(userId)
                 .username(username)
                 .build();

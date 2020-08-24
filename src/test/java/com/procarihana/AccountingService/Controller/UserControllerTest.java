@@ -1,5 +1,7 @@
 package com.procarihana.AccountingService.Controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.procarihana.AccountingService.converter.UserInfoCToSeConverterTest;
 import com.procarihana.accounting.controller.UserController;
 import com.procarihana.accounting.Manager.UserInfoManager;
 import com.procarihana.accounting.moudle.common.UserInfo;
@@ -7,6 +9,7 @@ import com.procarihana.accounting.converter.commonToService.UserInfoCToSeConvert
 import com.procarihana.accounting.exception.GlobalExceptionHandler;
 import com.procarihana.accounting.exception.InvalidParameterException;
 
+import lombok.val;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,8 +24,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
-import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,8 +53,6 @@ public class UserControllerTest {
     void getUserInfoByUserIdTest() throws Exception {
         String username = "666";
         String password = "666";
-        LocalDate createTime = LocalDate.now();
-        LocalDate updateTime = LocalDate.now();
         Long userId = 2L;
         UserInfo userInfoC = UserInfo.builder()
             .id(userId)
@@ -62,11 +61,12 @@ public class UserControllerTest {
             .build();
         doReturn(userInfoC).when(userInfoManager).getUserInfoByUserID(anyLong());
 
-
-        mockMvc.perform(get("/v1.0/users/" + userId))
+        mockMvc.perform(get("/v1.0/users/" + userId).contentType("application/json"))
             .andExpect(status().isOk())
             .andExpect(content().contentType("application/json;charset=utf-8 "))
-            .andExpect(content().string("{\"id\":2,\"username\":\"666\",\"password\":null}"));
+            .andExpect(content()
+                .string(new ObjectMapper().writeValueAsString(new UserInfoCToSeConverter().convert(userInfoC))));
+        //.andExpect(content().string("{\"id\":2,\"username\":\"666\",\"password\":null}"));
         verify(userInfoManager).getUserInfoByUserID(anyLong());
     }
 
@@ -83,6 +83,6 @@ public class UserControllerTest {
             .andExpect(content()
                 .string(
                     "{\"code\":\"USER_NOT_FOUND\",\"errorType\":\"Cline\",\"massage\":\"The user id -2 is invalid.\",\"statusCode\":400}"));
-        verify(userInfoManager,never()).getUserInfoByUserID(anyLong());
+        verify(userInfoManager, never()).getUserInfoByUserID(anyLong());
     }
 }

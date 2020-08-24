@@ -12,7 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 
 import static org.mockito.Mockito.*;
 
@@ -23,21 +24,21 @@ class UserInfoDaoTest {
     @InjectMocks
     private UserInfoDaoImpl userInfoDao;
 
-      @Test
+    @Test
     public void getUserByUserIdTest() {
         Long userId = 100L;
         String username = "222";
         String password = "222";
-        LocalDate createTime = LocalDate.now();
-        LocalDate updateTime = LocalDate.now();
+        LocalDateTime createTime = LocalDateTime.now();
+        LocalDateTime updateTime = LocalDateTime.now();
 
         UserInfo userInfo = UserInfo.builder()
-                .id(userId)
-                .createTime(createTime)
-                .updateTime(updateTime)
-                .password(password)
-                .username(username)
-                .build();
+            .id(userId)
+            .createTime(createTime)
+            .updateTime(updateTime)
+            .password(password)
+            .username(username)
+            .build();
         doReturn(userInfo).when(userInfoMapper).getUserInfoByyUserId(userId);
 
         val result = userInfoDao.getUserInfoById(userId);

@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Component
 @NoArgsConstructor
@@ -20,6 +20,7 @@ public class UserInfoPresToComConverter extends
         return com.procarihana.accounting.moudle.common.UserInfo.builder()
             .username(userInfo.getUsername())
             .password(userInfo.getPassword())
+            .salt(userInfo.getSalt())
             .createTime(userInfo.getCreateTime())
             .updateTime(userInfo.getUpdateTime())
             .id(userInfo.getId())
@@ -31,8 +32,9 @@ public class UserInfoPresToComConverter extends
         return UserInfo.builder()
             .username(userInfo.getUsername())
             .password(userInfo.getPassword())
-            .createTime(LocalDate.now())
-            .updateTime(LocalDate.now())
+            .salt(userInfo.getSalt())
+            .createTime(LocalDateTime.now())
+            .updateTime(LocalDateTime.now())
             .id(userInfo.getId())
             .build();
     }
