@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.LinkedHashMap;
 
 @Configuration
-public class ShiroConfig {
+public class shiroConfig {
     @Bean
     public SecurityManager securityManager(Realm realm) {
         return new DefaultWebSecurityManager(realm);
