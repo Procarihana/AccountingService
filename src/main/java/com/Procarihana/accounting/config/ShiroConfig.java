@@ -37,9 +37,10 @@ public class ShiroConfig {
 
         //@Todo:consider different HTTP method may need differetn  filter
         shiroFilterDefinitionMap.put("/v1.0/greeting", "authc"); //需要登录才能访问
-        // shiroFilterDefinitionMap.put("/v1.0/users/**", "anon");
+        shiroFilterDefinitionMap.put("/v1.0/users/**", "anon");
         //用同一个URL 'post'->anon, `get` -> authc
-        shiroFilterDefinitionMap.put("/v1.0/session", "anon");       //不需要登录就能访问
+        shiroFilterDefinitionMap.put("/v1.0/session", "anon");
+        shiroFilterDefinitionMap.put("/v1.0/tags/**", "anon");//不需要登录就能访问
         shiroFilterDefinitionMap.put("/**", "authc");//其他的页面需要登录才能够访问
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(shiroFilterDefinitionMap);
