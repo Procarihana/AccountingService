@@ -86,20 +86,24 @@ public class TagController {
     @PutMapping(path = "/{id}", consumes = "application/json", produces = "application/json")
     public Tag updateTag(@PathVariable("id") Long tagId, @RequestBody Tag tag) {
         String status = tag.getStatus();
-        if (status != null && "ENABLE".equals(status) && "DISABLE".equals(status)) {
-            throw new InvalidParameterException(String.format("The status [%s] to update is invalid status", status));
-        }
         if (tag.getUserId() == null || tag.getUserId() <= 0L) {
             throw new InvalidParameterException("The user id is empty or invalid");
         }
         if (tagId == null || tagId <= 0L) {
             throw new InvalidParameterException("The tag id is empty or invalid");
         }
-        userInfoManager.getUserInfoByUserID(tag.getUserId());
+        if (status != null && "ENABLE".equals(status) && "DISABLE".equals(status)) {
+            throw new InvalidParameterException(String.format("The status [%s] to update is invalid status", status));
+        }
+        checkUserIdIsExisting(tag);
         tag.setId(tagId);
 
         val tagInC = tagC2SConverter.reverse().convert(tag);
         val newTag = tagManager.updateTag(tagInC);
         return tagC2SConverter.convert(newTag);
+    }
+
+    private void checkUserIdIsExisting(Tag tag) {
+        userInfoManager.getUserInfoByUserID(tag.getUserId());
     }
 }

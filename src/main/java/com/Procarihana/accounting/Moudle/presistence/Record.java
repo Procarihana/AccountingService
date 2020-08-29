@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -14,13 +14,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Record {
-    private String recordId;
+    private Long id;
+    private Long userId;
     private BigDecimal amount;
-    private String notes;
-    private String category;
-    private List<String> tagList;
-    private LocalDate creationDate;
-    private LocalDate lastUpdateDate;
-    private String createdBy;
-    private String lastUpdateBy;
+    private String note;
+    private Integer category;
+    private List<Tag> tagList;
+    private LocalDateTime createTime;
+    private LocalDateTime lastUpdateDate;
+    private Integer status;
 }

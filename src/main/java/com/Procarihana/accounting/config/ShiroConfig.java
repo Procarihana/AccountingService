@@ -40,6 +40,7 @@ public class ShiroConfig {
         shiroFilterDefinitionMap.put("/v1.0/users/**", "anon");
         //用同一个URL 'post'->anon, `get` -> authc
         shiroFilterDefinitionMap.put("/v1.0/session", "anon");
+        shiroFilterDefinitionMap.put("/v1.0/records/**", "anon");
         shiroFilterDefinitionMap.put("/v1.0/tags/**", "anon");//不需要登录就能访问
         shiroFilterDefinitionMap.put("/**", "authc");//其他的页面需要登录才能够访问
 

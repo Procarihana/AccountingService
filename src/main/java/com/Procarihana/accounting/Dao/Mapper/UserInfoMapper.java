@@ -1,6 +1,5 @@
 package com.procarihana.accounting.Dao.Mapper;
 
-
 import com.procarihana.accounting.moudle.presistence.UserInfo;
 
 import org.apache.ibatis.annotations.Insert;

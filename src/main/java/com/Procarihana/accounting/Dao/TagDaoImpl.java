@@ -9,6 +9,9 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
+
 @Slf4j
 @Repository
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -37,5 +40,10 @@ public class TagDaoImpl implements TagDao {
     public void updateTag(Tag updateTag) {
         tagMapper.updateTag(updateTag);
 
+    }
+
+    @Override
+    public List<Tag> getTagListByTagIds(List<Long> tagIds) {
+        return tagMapper.getTagListByTagIds(tagIds);
     }
 }

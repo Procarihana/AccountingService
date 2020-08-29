@@ -10,11 +10,15 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
+
+import java.util.List;
+
 
 @Mapper
 public interface TagMapper {
-    @Options(useGeneratedKeys = true, keyProperty = "id") //表示id为自增
+    @Options(useGeneratedKeys = true, keyProperty = "id") //表示tagId放回insert里面
     @Insert("INSERT INTO accounting_tag(description, user_id, status)"
         + "VALUES (#{description}, #{userId}, #{status})")
     int insert(Tag tag);  //表示插入多少条数据
@@ -47,4 +51,13 @@ public interface TagMapper {
         @Result(column = "update_time", property = "updateTime"),
     })
     Tag getTagByTagId(@Param("id") Long tagId);
+
+    @SelectProvider(type = TagSqlProvider.class, method = "getTagListByTagIds")
+    @Results({
+        @Result(column = "id", property = "id"),
+        @Result(column = "description", property = "description"),
+        @Result(column = "user_id", property = "userId"),
+        @Result(column = "status", property = "status"),
+    })
+    List<Tag> getTagListByTagIds(@Param("id") List<Long> tagIds);
 }
